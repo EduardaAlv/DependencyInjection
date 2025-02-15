@@ -1,3 +1,5 @@
+using DependencyInjection.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -13,6 +15,7 @@ builder.Services.AddTransient<IApplicationBuilder, ApplicationBuilder>();
 
 //Objeto só muda por request
 builder.Services.AddScoped<IApplicationBuilder, ApplicationBuilder>();
+builder.Services.AddScoped<IService, Service>();
 
 //Objeto não muda 
 builder.Services.AddSingleton<IApplicationBuilder, ApplicationBuilder>();

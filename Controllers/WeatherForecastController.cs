@@ -1,3 +1,4 @@
+using DependencyInjection.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DependencyInjection.Controllers
@@ -12,22 +13,20 @@ namespace DependencyInjection.Controllers
         };
 
         private readonly ILogger<WeatherForecastController> _logger;
+        private readonly IService _service;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, IService service)
         {
             _logger = logger;
+            _service = service;
         }
 
         [HttpGet(Name = "GetWeatherForecast")]
-        public IEnumerable<WeatherForecast> Get()
+        public List<string> Get()
         {
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
+            List<string> nomesLista = new List<string>();
+            nomesLista.Add("Eduarda");
+            return _service.GetNomes(nomesLista);
         }
     }
 }
