@@ -22,11 +22,27 @@ namespace DependencyInjection.Controllers
         }
 
         [HttpGet(Name = "GetWeatherForecast")]
-        public List<string> Get()
+        public async Task<List<string>> Get()
         {
             List<string> nomesLista = new List<string>();
-            nomesLista.Add("Eduarda");
-            return _service.GetNomes(nomesLista);
+
+            //Separa o seu código em outra Thread e vai executar esse código separado, não travando sua outra thread
+            //Aqui por exemplo está adicionando o nome depois da thread dormir por 3000 milisegundos
+            await Task.Run(() => {
+                Thread.Sleep(3000); // Simula uma operação demorada
+                nomesLista.Add("Eduarda");
+            });
+;
+            var result = _service.GetNomes(nomesLista);
+
+            //Assincronísmo 
+            //Await deve ser utilizado em toda chamada de um método que retorne Task ou Task<T>
+            //(Em caso de métodos sincronos, chame o await e transforme o resultado em Task<T> com o Task.FromResult(result);)
+            //Utilize pelo menos 1 await em um método sincrono, o await faz com que o método "pare"
+            //sua execução temporariamente, até que a Task termine, mas ao mesmo tempo, não bloqueia a thread
+            // deixando que outras operações possam acontecer
+            //Utilize o Task.FromResult para transformar um resultado não assincrono para assincrono (para o tipo Task)
+            return await Task.FromResult(result);
         }
     }
 }
